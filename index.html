@@ -14,8 +14,7 @@
     body {
       font-family: 'Segoe UI', sans-serif;
       overflow: hidden;
-      background-color: #0f0c29;
-      background-image: linear-gradient(315deg, #0f0c29 0%, #302b63 74%);
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
       color: white;
     }
 
@@ -33,6 +32,8 @@
       opacity: 0;
       transform: scale(0.9);
       pointer-events: none;
+      padding: 20px;
+      text-align: center;
     }
 
     .page.active {
@@ -43,35 +44,37 @@
     }
 
     .heart {
-      width: 100px;
-      height: 90px;
+      width: 150px;
+      height: 135px;
       position: relative;
+      transform: rotate(-45deg);
       animation: beat 1s infinite;
+      margin-bottom: 20px;
     }
 
     .heart::before,
     .heart::after {
       content: "";
       position: absolute;
-      width: 100px;
+      width: 150px;
       height: 150px;
       background: red;
-      border-radius: 50px 50px 0 0;
-      top: 0;
-      left: 50px;
-      transform: rotate(-45deg);
-      transform-origin: 0 100%;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -75px;
+      left: 0;
     }
 
     .heart::after {
-      left: 0;
-      transform: rotate(45deg);
-      transform-origin: 100% 100%;
+      left: 75px;
+      top: 0;
     }
 
     @keyframes beat {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
+      0%, 100% { transform: rotate(-45deg) scale(1); }
+      50% { transform: rotate(-45deg) scale(1.1); }
     }
 
     h1, h2, h3 {
@@ -79,20 +82,40 @@
       text-align: center;
     }
 
+    .typewriter {
+      display: inline-block;
+      border-right: 2px solid white;
+      white-space: nowrap;
+      overflow: hidden;
+      animation: typing 4s steps(30, end), blink 0.75s step-end infinite;
+      font-size: 24px;
+      max-width: 90%;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent }
+    }
+
     button {
       margin-top: 20px;
-      padding: 12px 24px;
-      background: #ff4081;
+      padding: 14px 28px;
+      background: linear-gradient(45deg, #ff0066, #ff66cc);
       border: none;
       color: white;
-      font-size: 16px;
+      font-size: 18px;
       border-radius: 30px;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: all 0.3s ease;
     }
 
     button:hover {
-      background: #ff1f6a;
+      transform: scale(1.1);
+      background: linear-gradient(45deg, #e6005c, #cc3399);
     }
 
     .card {
@@ -110,26 +133,60 @@
       from { opacity: 0; transform: translateY(40px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    .glow {
+      color: #ff69b4;
+      font-size: 28px;
+      animation: glow 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff69b4;
+      }
+      to {
+        text-shadow: 0 0 20px #ff1493, 0 0 30px #ff1493;
+      }
+    }
+
+    #particles-js {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      top: 0;
+      left: 0;
+    }
+
+    .page-content {
+      position: relative;
+      z-index: 2;
+    }
   </style>
 </head>
 <body>
+  <!-- Optional Background Music -->
+  <!-- <audio autoplay loop hidden>
+    <source src="your-love-music.mp3" type="audio/mpeg">
+  </audio> -->
+
   <!-- Page 1 -->
   <div class="page active" id="page1">
     <div class="heart"></div>
-    <h1>Love You Zain ul Ain 💖</h1>
+    <h1 class="typewriter">Love You Zain ul Ain 💖</h1>
     <button onclick="goToPage(2)">Love Me</button>
   </div>
 
   <!-- Page 2 -->
   <div class="page" id="page2">
-    <h2>You are very special ✨</h2>
+    <h2 class="typewriter">You are very special ✨</h2>
     <button onclick="goToPage(3)">Next</button>
   </div>
 
   <!-- Page 3 -->
   <div class="page" id="page3">
     <div class="card">
-      <h3>You're the reason behind my smile 😊</h3>
+      <h3>You are the reason behind my smile 😊</h3>
       <p>Just like stars light the sky, you light up my life!</p>
     </div>
     <button onclick="goToPage(4)">More</button>
@@ -137,8 +194,11 @@
 
   <!-- Page 4 -->
   <div class="page" id="page4">
-    <h2 style="color:#ff69b4; animation: glow 1s infinite alternate;">Forever & Always 💘</h2>
-    <button onclick="goToPage(1)">Start Again</button>
+    <div id="particles-js"></div>
+    <div class="page-content">
+      <h2 class="glow">Forever & Always 💘</h2>
+      <button onclick="goToPage(1)">Start Again</button>
+    </div>
   </div>
 
   <script>
@@ -146,6 +206,53 @@
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.getElementById('page' + n).classList.add('active');
     }
+  </script>
+
+  <!-- Include particles.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      "particles": {
+        "number": {
+          "value": 60,
+          "density": { "enable": true, "value_area": 800 }
+        },
+        "color": { "value": "#ff69b4" },
+        "shape": {
+          "type": "circle",
+          "stroke": { "width": 0, "color": "#000000" },
+        },
+        "opacity": {
+          "value": 0.6,
+          "random": true,
+          "anim": { "enable": false }
+        },
+        "size": {
+          "value": 6,
+          "random": true,
+          "anim": { "enable": false }
+        },
+        "line_linked": {
+          "enable": true,
+          "distance": 150,
+          "color": "#ff69b4",
+          "opacity": 0.4,
+          "width": 1
+        },
+        "move": {
+          "enable": true,
+          "speed": 3,
+          "direction": "none",
+          "out_mode": "out"
+        }
+      },
+      "interactivity": {
+        "events": {
+          "onhover": { "enable": true, "mode": "repulse" }
+        }
+      },
+      "retina_detect": true
+    });
   </script>
 </body>
 </html>
